@@ -40,7 +40,7 @@ class POLAR_API:
         df_players = pd.json_normalize(players)
         # remove staff
         df_players = df_players[df_players['player_number'] < 100]
-        
+
         return df_players
 
     def retrieve_authorization_code(self):
