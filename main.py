@@ -67,7 +67,7 @@ year = x[0]
 month = x[1]
 day = x[2]
 
-if chosen_team in ["Superliga", "RTD senior", '"U19", "U17', 'U15']:
+if chosen_team in ["Superliga", "RTD senior", "U19", "U17", 'U15']:
     account = "M"
 elif chosen_team in ["Kvindeliga", 'Girls U18', "U16W"]:
     account = 'W'
