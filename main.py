@@ -10,6 +10,11 @@ from api.polar_api_old import get_all_player_session_details_trimmed, get_player
 from api.polar_api import POLAR_API
 
 #%%
+
+client_id = st.secrets['client_id']
+client_secret = st.secrets['client_secret']
+
+
 st.set_page_config(page_title="Polar data extraction", layout ='centered')
 
 st.title("Polar training/match data extraction")
@@ -49,7 +54,7 @@ authorize_params = {'client_id': client_id,
                                  'response_type': 'code',
                                  'scope': 'team_read'}
 
-encoding = client_id+':'+client_secret
+encoding = client_id+':'+ client_secret
 message_bytes = encoding.encode('ascii')
 base64_bytes = base64.b64encode(message_bytes)
 base64_encoding = base64_bytes.decode('ascii')
