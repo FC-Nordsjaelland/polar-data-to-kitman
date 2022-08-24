@@ -25,7 +25,7 @@ st.markdown("1) The program will automatically open a Polar authentication page 
 with st.form(key='my_form'):
     authorization_code = st.text_input('Input the Polar authentication token below')
     # account = st.selectbox("Choose Account", options=["Men's", "Women's"])
-    chosen_team = st.selectbox("Choose a team", options=["U17", "U15","Girls U18", "U16W"])
+    chosen_team = st.selectbox("Choose a team", options=["Superliga", "Kvindeliga", "RTD senior", "U19", "U17", "U15","Girls U18", "U16W"])
     d = st.date_input(
         "Choose a training session's date",
         datetime.date(2022, 8, 17))
@@ -38,9 +38,9 @@ year = x[0]
 month = x[1]
 day = x[2]
 
-if chosen_team in ['U17', 'U15']:
+if chosen_team in ["Superliga", "RTD senior", '"U19", "U17', 'U15']:
     account = "M"
-elif chosen_team in ['Girls U18', "U16W"]:
+elif chosen_team in ["Kvindeliga", 'Girls U18', "U16W"]:
     account = 'W'
 else:
     st.write("Error")
