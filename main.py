@@ -77,9 +77,9 @@ set_date = day + "-" + month + "-" + year
 
 api = POLAR_API(client_id, client_secret, team=chosen_team)
 
-template = pd.read_excel("CSV_template.xlsx", skiprows=1)
+template = pd.read_excel("templates/CSV_template.xlsx", skiprows=1)
 # girls_template = pd.read_excel("CSV_template.xlsx", skiprows=1)
-girls_template = pd.read_csv("CSV_girls_template.csv", delimiter=";")
+girls_template = pd.read_csv("templates/CSV_girls_template.csv", delimiter=";")
 
 # # tokens = api.retrieve_tokens()
 team_id = api.get_teams_info(tokens, get_team_id=True)
