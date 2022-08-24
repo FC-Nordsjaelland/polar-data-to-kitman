@@ -77,8 +77,9 @@ set_date = day + "-" + month + "-" + year
 
 api = POLAR_API(client_id, client_secret, team=chosen_team)
 
-template = pd.read_excel("templates/CSV_template.xlsx", skiprows=1)
-girls_template = pd.read_excel("templates/CSV_template.xlsx", skiprows=1)
+template = pd.read_excel("CSV_template.xlsx", skiprows=1)
+# girls_template = pd.read_excel("CSV_template.xlsx", skiprows=1)
+girls_template = pd.read_csv("CSV_girls_template.csv", delimiter=";")
 
 # # tokens = api.retrieve_tokens()
 team_id = api.get_teams_info(tokens, get_team_id=True)
@@ -154,25 +155,25 @@ def preprocess():
         data[columns_dec_0] = data[columns_dec_0].astype(int)
     
     elif account == "W":
-        data.rename(columns={"Time in HR zone 2 (60 - 69 %)":"Time in HR zone 2 (60 - 79 %)",
-                            "Time in HR zone 3 (70 - 79 %)":"Time in HR zone 3 (80 - 84 %)",
-                            "Time in HR zone 4 (80 - 89 %)":"Time in HR zone 4 (85 - 94 %)", 
-                            "Time in HR zone 5 (90 - 100 %)":"Time in HR zone 5 (95 - 100 %)"}, inplace=True)
+        # data.rename(columns={"Time in HR zone 2 (60 - 69 %)":"Time in HR zone 2 (60 - 69 %)",
+        #                     "Time in HR zone 3 (70 - 79 %)":"Time in HR zone 3 (70 - 79 %)",
+        #                     "Time in HR zone 4 (80 - 89 %)":"Time in HR zone 4 (80 - 89 %)", 
+        #                     "Time in HR zone 5 (90 - 100 %)":"Time in HR zone 5 (90 - 100 %)"}, inplace=True)
 
-        data.rename(columns={"Distance in Speed zone 1 [m] (10.00 - 17.99 km/h)":"Distance in Speed zone 1 [m] (12.00 - 20.99 km/h)",
-                            "Distance in Speed zone 2 [m] (18.00 - 20.99 km/h)":"Distance in Speed zone 2 [m] (21.00 - 23.99 km/h)", 
-                            "Distance in Speed zone 3 [m] (21.00 - 23.99 km/h)":"Distance in Speed zone 3 [m] (24.00 - 25.19 km/h)",
-                            "Distance in Speed zone 4 [m] (24.00 - 26.99 km/h)":"Distance in Speed zone 4 [m] (25.20 - 29.99 km/h)", 
-                            "Distance in Speed zone 5 [m] (27.00- km/h)":"Distance in Speed zone 5 [m] (30.00- km/h)"}, inplace=True)
+        data.rename(columns={"Distance in Speed zone 1 [m] (12.00 - 20.99 km/h)":"Distance in Speed zone 1 [m] (10.00 - 17.99 km/h)",
+                            "Distance in Speed zone 2 [m] (21.00 - 23.99 km/h)":"Distance in Speed zone 2 [m] (18.00 - 20.99 km/h)",
+                            "Distance in Speed zone 3 [m] (24.00 - 25.19 km/h)":"Distance in Speed zone 3 [m] (21.00 - 23.99 km/h)",
+                            "Distance in Speed zone 4 [m] (25.20 - 29.99 km/h)":"Distance in Speed zone 4 [m] (24.00 - 26.99 km/h)", 
+                            "Distance in Speed zone 5 [m] (30.00- km/h)":"Distance in Speed zone 5 [m] (27.00- km/h)"}, inplace=True)
         
-        data.rename(columns={"Number of accelerations (-50.00 - -2.70 m/s²)":"Number of accelerations (-50.00 - -9.00 m/s²)",
-                            "Number of accelerations (-2.69 - -2.00 m/s²)":"Number of accelerations (-8.99 - -6.00 m/s²)", 
-                            "Number of accelerations (-1.99 - -1.00 m/s²)":"Number of accelerations (-5.99 - -3.00 m/s²)",
-                            "Number of accelerations (-0.99 - -0.50 m/s²)":"Number of accelerations (-2.99 - -0.50 m/s²)", 
-                            "Number of accelerations (0.50 - 0.99 m/s²)":"Number of accelerations (0.50 - 2.99 m/s²)",
-                            "Number of accelerations (1.00 - 1.99 m/s²)":"Number of accelerations (3.00 - 5.99 m/s²)",
-                            "Number of accelerations (2.00 - 2.69 m/s²)":"Number of accelerations (6.00 - 8.99 m/s²)",
-                            "Number of accelerations (2.70 - 50.00 m/s²)":"Number of accelerations (9.00 - 50.00 m/s²)"}, inplace=True)
+        data.rename(columns={"Number of accelerations (-50.00 - -9.00 m/s²)":"Number of accelerations (-50.00 - -2.70 m/s²)",
+                            "Number of accelerations (-8.99 - -6.00 m/s²)":"Number of accelerations (-2.69 - -2.00 m/s²)", 
+                            "Number of accelerations (-5.99 - -3.00 m/s²)":"Number of accelerations (-1.99 - -1.00 m/s²)",
+                            "Number of accelerations (-2.99 - -0.50 m/s²)":"Number of accelerations (-0.99 - -0.50 m/s²)", 
+                            "Number of accelerations (0.50 - 2.99 m/s²)":"Number of accelerations (0.50 - 0.99 m/s²)",
+                            "Number of accelerations (3.00 - 5.99 m/s²)":"Number of accelerations (1.00 - 1.99 m/s²)",
+                            "Number of accelerations (6.00 - 8.99 m/s²)":"Number of accelerations (2.00 - 2.69 m/s²)",
+                            "Number of accelerations (9.00 - 50.00 m/s²)":"Number of accelerations (2.70 - 50.00 m/s²)"}, inplace=True)
 
         final_columns = list(girls_template.columns.values)
         columns_before_calc = final_columns[:-6]
@@ -180,16 +181,16 @@ def preprocess():
         
         data = pd.concat([data, pd.Series(data['Duration'].astype(str).apply(hms_to_m), name='Duration')], axis=1)
         data = pd.concat([data, pd.Series(data['Time in HR zone 1 (50 - 59 %)'].apply(hms_to_m), name='Time in HR zone 1 (50 - 59 %)')], axis=1)
-        data = pd.concat([data, pd.Series(data['Time in HR zone 2 (60 - 79 %)'].apply(hms_to_m), name='Time in HR zone 2 (60 - 69 %)')], axis=1)
-        data = pd.concat([data, pd.Series(data['Time in HR zone 3 (80 - 84 %)'].apply(hms_to_m), name='Time in HR zone 3 (70 - 79 %)')], axis=1)
-        data = pd.concat([data, pd.Series(data['Time in HR zone 4 (85 - 94 %)'].apply(hms_to_m), name='Time in HR zone 4 (80 - 89 %)')], axis=1)
-        data = pd.concat([data, pd.Series(data['Time in HR zone 5 (95 - 100 %)'].apply(hms_to_m), name='Time in HR zone 5 (90 - 100 %)')], axis=1)
+        data = pd.concat([data, pd.Series(data['Time in HR zone 2 (60 - 69 %)'].apply(hms_to_m), name='Time in HR zone 2 (60 - 69 %)')], axis=1)
+        data = pd.concat([data, pd.Series(data['Time in HR zone 3 (70 - 79 %)'].apply(hms_to_m), name='Time in HR zone 3 (70 - 79 %)')], axis=1)
+        data = pd.concat([data, pd.Series(data['Time in HR zone 4 (80 - 89 %)'].apply(hms_to_m), name='Time in HR zone 4 (80 - 89 %)')], axis=1)
+        data = pd.concat([data, pd.Series(data['Time in HR zone 5 (90 - 100 %)'].apply(hms_to_m), name='Time in HR zone 5 (90 - 100 %)')], axis=1)
         data['Maximum speed [km/h]'] = data["Maximum speed [km/h]"].round(decimals = 1)
         data['Average speed [km/h]'] = data["Average speed [km/h]"].round(decimals = 1)
 
         
 
-        columns_dec_0 = ['Total distance [m]', 'Distance / min [m/min]', 'Distance in Speed zone 1 [m] (12.00 - 20.99 km/h)', 'Distance in Speed zone 2 [m] (21.00 - 23.99 km/h)', 'Distance in Speed zone 3 [m] (24.00 - 25.19 km/h)', 'Distance in Speed zone 4 [m] (25.20 - 29.99 km/h)', 'Distance in Speed zone 5 [m] (30.00- km/h)']
+        columns_dec_0 = ['Total distance [m]', 'Distance / min [m/min]', "Distance in Speed zone 1 [m] (10.00 - 17.99 km/h)", "Distance in Speed zone 2 [m] (18.00 - 20.99 km/h)", "Distance in Speed zone 3 [m] (21.00 - 23.99 km/h)", "Distance in Speed zone 4 [m] (24.00 - 26.99 km/h)", "Distance in Speed zone 5 [m] (27.00- km/h)"]
         data[columns_dec_0] = data[columns_dec_0].round(decimals=0)
         data[columns_dec_0] = data[columns_dec_0].astype(int)
 
