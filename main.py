@@ -34,8 +34,9 @@ headers = {'Authorization': 'Basic '+ base64_encoding}
 r = requests.get(authorize_url, params=authorize_params)
 # st.write(r.history[0].url)
 # webbrowser.open(r.history[0].url, new=2)
+link = 'r.history[0].url'
 
-st.markdown("1) Navigate to this [link]({r.history[0].url})  \n 2) After a successful authentication, expand the link of the page and copy the code (fx. 'http://xyz/?code=u9xMkv')  \n3) Paste the code into the first cell in the form below  \n 4) Choose your team, training/match date, session number (in case there's multiple sessions in a day, fx. 1 stands for the first session in a day)  \n5) Input the session's name (fx. 'FCN U17 vs FCM U17' / default: 'Football Training')")
+st.markdown("1) Navigate to this [link]({link})  \n 2) After a successful authentication, expand the link of the page and copy the code (fx. 'http://xyz/?code=u9xMkv')  \n3) Paste the code into the first cell in the form below  \n 4) Choose your team, training/match date, session number (in case there's multiple sessions in a day, fx. 1 stands for the first session in a day)  \n5) Input the session's name (fx. 'FCN U17 vs FCM U17' / default: 'Football Training')")
 
 
 
