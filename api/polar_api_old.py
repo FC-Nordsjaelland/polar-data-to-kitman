@@ -3,7 +3,6 @@ import requests
 import webbrowser
 import base64
 import json
-from tqdm import tqdm
 import sys, os
 import isodate
 from datetime import datetime, timedelta
@@ -304,7 +303,7 @@ def get_all_player_session_details(tokens, player_session_ids, training_session_
     """
     # go through all session ids and get_player_session_details
     all_session_details = []
-    for player_id, player_session_id in tqdm(player_session_ids.items(), desc='Getting player data'):
+    for player_id, player_session_id in player_session_ids.items():
         df_session_player = get_player_session_details(tokens, player_session_id, training_session_id)
         df_session_player.insert(loc=0, column='player_id', value=player_id)
         
