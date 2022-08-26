@@ -209,11 +209,10 @@ def convert_df(df):
 try:
     data = preprocess()
     csv = convert_df(data)
+    date_f = day + month + year[2:]
+    csv_name = chosen_team + "_" + date_f + ".csv"
 except:
     pass
-
-date_f = day + month + year[2:]
-csv_name = chosen_team + "_" + date_f + ".csv"
 
 st.download_button(
    "Download the training session's data for " + set_date,
