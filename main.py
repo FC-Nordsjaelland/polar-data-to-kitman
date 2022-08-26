@@ -203,15 +203,14 @@ def preprocess():
     return data
 
 # %%
-try:
-    data = preprocess()
-except:
-    pass
-
 def convert_df(df):
    return df.to_csv(index=False).encode('utf-8')
 
-csv = convert_df(data)
+try:
+    data = preprocess()
+    csv = convert_df(data)
+except:
+    pass
 
 date_f = day + month + year[2:]
 csv_name = chosen_team + "_" + date_f + ".csv"
