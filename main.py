@@ -199,11 +199,13 @@ def preprocess():
     return data
 
 # %%
-data = preprocess()
+try:
+    data = preprocess()
+except:
+    pass
 
 def convert_df(df):
    return df.to_csv(index=False).encode('utf-8')
-
 
 csv = convert_df(data)
 
