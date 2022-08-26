@@ -33,7 +33,10 @@ message_bytes = encoding.encode('ascii')
 base64_bytes = base64.b64encode(message_bytes)
 base64_encoding = base64_bytes.decode('ascii')
 headers = {'Authorization': 'Basic '+ base64_encoding}
-r = requests.get(authorize_url, params=authorize_params)
+try:
+    r = requests.get(authorize_url, params=authorize_params)
+except:
+    pass
 # st.write(r.history[0].url)
 # webbrowser.open(r.history[0].url, new=2)
 link = r.history[0].url
