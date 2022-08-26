@@ -37,6 +37,7 @@ r = requests.get(authorize_url, params=authorize_params)
 link = r.history[0].url
 
 st.markdown("1) Navigate to the [link](%s)" % link, unsafe_allow_html=True)
+st.markdown(link)
 st.markdown("2) After a successful authentication, expand the link of the page and copy the code (fx. 'http://xyz/?code=u9xMkv')")
 st.markdown("3) Paste the code into the first cell in the form below")
 st.markdown("4) Choose your team, training/match date, session number (in case there's multiple sessions in a day, fx. 1 stands for the first session in a day")  
