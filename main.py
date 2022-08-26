@@ -209,6 +209,12 @@ def convert_df(df):
 try:
     data = preprocess()
     csv = convert_df(data)
+
+    if chosen_team == "Girls U18":
+        chosen_team = "Girls_U18"
+    elif chosen_team =="RTD senior":
+        chosen_team == 'RTD_senior'
+        
     date_f = day + month + year[2:]
     csv_name = chosen_team + "_" + date_f + ".csv"
     st.download_button(
