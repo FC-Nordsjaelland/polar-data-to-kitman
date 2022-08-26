@@ -212,7 +212,7 @@ try:
     date_f = day + month + year[2:]
     csv_name = chosen_team + "_" + date_f + ".csv"
     st.download_button(
-   "Download the training session's data for " + set_date,
+   "Download the " + chosen_team + " " + session_name ' data for " + set_date,
    csv,
    csv_name,
    "text/csv",
