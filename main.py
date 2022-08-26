@@ -22,79 +22,80 @@ st.title("Polar training/match data extraction")
 st.text("")
 st.header("**Instruction**")
 
-authorize_url = 'https://auth.polar.com/oauth/authorize'
-access_token_url = 'https://auth.polar.com/oauth/token'
-authorize_params = {'client_id': client_id,
-                                 'response_type': 'code',
-                                 'scope': 'team_read'}
-
-encoding = client_id+':'+ client_secret
-message_bytes = encoding.encode('ascii')
-base64_bytes = base64.b64encode(message_bytes)
-base64_encoding = base64_bytes.decode('ascii')
-headers = {'Authorization': 'Basic '+ base64_encoding}
 try:
+    authorize_url = 'https://auth.polar.com/oauth/authorize'
+    access_token_url = 'https://auth.polar.com/oauth/token'
+    authorize_params = {'client_id': client_id,
+                                    'response_type': 'code',
+                                    'scope': 'team_read'}
+
+    encoding = client_id+':'+ client_secret
+    message_bytes = encoding.encode('ascii')
+    base64_bytes = base64.b64encode(message_bytes)
+    base64_encoding = base64_bytes.decode('ascii')
+    headers = {'Authorization': 'Basic '+ base64_encoding}
     r = requests.get(authorize_url, params=authorize_params)
+
+    # st.write(r.history[0].url)
+    # webbrowser.open(r.history[0].url, new=2)
+    link = r.history[0].url
+
+    st.markdown("1) Right click, copy and open the [link](%s)" % link, unsafe_allow_html=True)
+    st.markdown("2) After a successful authentication, expand the link of the page and copy the code (fx. 'http://xyz/?code=u9xMkv')")
+    st.markdown("3) Paste the code into the first cell in the form below")
+    st.markdown("4) Choose your team, training/match date, session number (in case there's multiple sessions in a day, fx. 1 stands for the first session in a day")  
+    st.markdown("5) Input the session's name (fx. 'FCN U17 vs FCM U17' / default: 'Football Training')")
+
+
+
+    with st.form(key='my_form'):
+        authorization_code = st.text_input('Input the Polar authentication token below')
+        # account = st.selectbox("Choose Account", options=["Men's", "Women's"])
+        chosen_team = st.selectbox("Choose a team", options=["Superliga", "Kvindeliga", "RTD senior", "U19", "U17", "U15","Girls U18", "U16W"])
+        d = st.date_input(
+            "Choose a training session's date",
+            datetime.date(2022, 8, 17))
+        no_of_session = st.selectbox("Session number", ['1','2','3','4'])
+        session_name = st.text_input("Input session's name", "Football Training")
+        st.form_submit_button()
+
+    access_token_data = {'grant_type': 'authorization_code',
+                        'code': authorization_code}
+    r_post = requests.post(access_token_url,
+    data=access_token_data,
+    headers=headers)
+    tokens = r_post.json()
+
+    x = str(d).split("-")
+    year = x[0]
+    month = x[1]
+    day = x[2]
+
+    if chosen_team in ["Superliga", "RTD senior", "U19", "U17", 'U15']:
+        account = "M"
+    elif chosen_team in ["Kvindeliga", 'Girls U18', "U16W"]:
+        account = 'W'
+
+
+    set_date = day + "-" + month + "-" + year
+
+    api = POLAR_API(client_id, client_secret, team=chosen_team)
+
+    template = pd.read_excel("templates/CSV_template.xlsx", skiprows=1)
+    # girls_template = pd.read_excel("CSV_template.xlsx", skiprows=1)
+    girls_template = pd.read_csv("templates/CSV_girls_template.csv", delimiter=";")
+
+    # # tokens = api.retrieve_tokens()
+    team_id = api.get_teams_info(tokens, get_team_id=True)
+
+
+
+    # set_date = '08-08-2022'
+    sessions_meta = api.get_sessions(tokens, team_id=team_id, date=set_date)
+    session_id = sessions_meta['data'][-(int(no_of_session))]['id']
+    player_session_ids = get_player_session_ids(tokens, session_id)
 except:
     pass
-# st.write(r.history[0].url)
-# webbrowser.open(r.history[0].url, new=2)
-link = r.history[0].url
-
-st.markdown("1) Right click, copy and open the [link](%s)" % link, unsafe_allow_html=True)
-st.markdown("2) After a successful authentication, expand the link of the page and copy the code (fx. 'http://xyz/?code=u9xMkv')")
-st.markdown("3) Paste the code into the first cell in the form below")
-st.markdown("4) Choose your team, training/match date, session number (in case there's multiple sessions in a day, fx. 1 stands for the first session in a day")  
-st.markdown("5) Input the session's name (fx. 'FCN U17 vs FCM U17' / default: 'Football Training')")
-
-
-
-with st.form(key='my_form'):
-    authorization_code = st.text_input('Input the Polar authentication token below')
-    # account = st.selectbox("Choose Account", options=["Men's", "Women's"])
-    chosen_team = st.selectbox("Choose a team", options=["Superliga", "Kvindeliga", "RTD senior", "U19", "U17", "U15","Girls U18", "U16W"])
-    d = st.date_input(
-        "Choose a training session's date",
-        datetime.date(2022, 8, 17))
-    no_of_session = st.selectbox("Session number", ['1','2','3','4'])
-    session_name = st.text_input("Input session's name", "Football Training")
-    st.form_submit_button()
-
-access_token_data = {'grant_type': 'authorization_code',
-                    'code': authorization_code}
-r_post = requests.post(access_token_url,
-data=access_token_data,
-headers=headers)
-tokens = r_post.json()
-
-x = str(d).split("-")
-year = x[0]
-month = x[1]
-day = x[2]
-
-if chosen_team in ["Superliga", "RTD senior", "U19", "U17", 'U15']:
-    account = "M"
-elif chosen_team in ["Kvindeliga", 'Girls U18', "U16W"]:
-    account = 'W'
-
-
-set_date = day + "-" + month + "-" + year
-
-api = POLAR_API(client_id, client_secret, team=chosen_team)
-
-template = pd.read_excel("templates/CSV_template.xlsx", skiprows=1)
-# girls_template = pd.read_excel("CSV_template.xlsx", skiprows=1)
-girls_template = pd.read_csv("templates/CSV_girls_template.csv", delimiter=";")
-
-# # tokens = api.retrieve_tokens()
-team_id = api.get_teams_info(tokens, get_team_id=True)
-
-
-
-# set_date = '08-08-2022'
-sessions_meta = api.get_sessions(tokens, team_id=team_id, date=set_date)
-session_id = sessions_meta['data'][-(int(no_of_session))]['id']
-player_session_ids = get_player_session_ids(tokens, session_id)
 # %%
 def hms_to_m(s):
     t = 0
