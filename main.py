@@ -14,7 +14,9 @@ from api.polar_api import POLAR_API
 client_id = st.secrets['client_id']
 client_secret = st.secrets['client_secret']
 
-st.set_page_config(page_title="Polar data extraction", layout ='centered')
+img = Image.open("templates/FCN_logo.png")
+
+st.set_page_config(page_title="Polar data extraction", page_icon=img, layout ='centered')
 
 st.title("Polar training/match data extraction")
 st.text("")
