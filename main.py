@@ -54,7 +54,7 @@ try:
         chosen_team = st.selectbox("Choose a team", options=["Superliga", "Kvindeliga", "RTD senior", "U19", "U17", "U15","Girls U18", "U16W"])
         d = st.date_input(
             "Choose a training session's date",
-            datetime.date(2022, 8, 17))
+            datetime.date.today())
         no_of_session = st.selectbox("Session number", ['1','2','3','4'])
         session_name = st.text_input("Input session's name", "Football Training")
         st.form_submit_button()
